@@ -64,12 +64,12 @@ curl -s -u elastic:changeme -X POST http://localhost:9200/talks/_search -H 'Cont
 to build image use
 
 ```bash
-docker buildx build --platform linux/amd64 -t mac2000/talks:latest .
-docker push mac2000/talks
+docker buildx build --platform linux/amd64 -t ghcr.io/iplantalks/talks:latest .
+docker push ghcr.io/iplantalks/talks
 ```
 
 to run it locally use
 
 ```bash
-docker run -it --rm -p 3000:3000 --link=es -e ES_HOSTNAME=http://es:9200 mac2000/talks
+docker run -it --rm -p 3000:3000 --link=es -e ES_HOSTNAME=http://es:9200 ghcr.io/iplantalks/talks
 ```
