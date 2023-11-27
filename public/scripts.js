@@ -86,6 +86,11 @@ async function load() {
 
   renderItems(res);
   rednerFacets(res);
+  if (typeof gtag !== "undefined") {
+    gtag("event", "view_search_results", {
+      search_term: search,
+    });
+  }
 }
 
 function renderItems(res) {
