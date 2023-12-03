@@ -118,6 +118,10 @@ footer img {
   padding: 20px;
 }
 
+.main main {
+  padding-bottom: 5px;
+}
+
 .main #search {
   font: inherit;
   box-sizing: border-box;
@@ -135,7 +139,7 @@ footer img {
 }
 
 .main aside {
-  background: #ebebeb;
+  background: #f0f4f4;
 }
 
 #facets p {
@@ -174,6 +178,33 @@ footer img {
   }
 }
 
+/* call to action section */
+#ca {
+  background: #f0f4f4;
+  padding: 170px 20px;
+
+  background-image: url("https://italks.com.ua/users/sergii.mikulov/img/1img-20231123084414754756.png");
+  background-repeat: no-repeat;
+  background-position-x: right;
+  background-position-y: center;
+}
+
+#ca h1 {
+  font-weight: 500;
+}
+
+#ca p {
+  margin: 20px 0;
+}
+
+#ca a {
+  border-radius: 5px;
+  background: #105889;
+  color: white;
+  padding: 10px 20px;
+  display: inline-block;
+}
+
 @media (max-width: 42em) {
   header h1 span,
   #facets,
@@ -204,6 +235,12 @@ footer img {
   }
 
   footer {
+    text-align: center;
+  }
+
+  #ca {
+    background-image: none;
+    padding: 20px;
     text-align: center;
   }
 }
