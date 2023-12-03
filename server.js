@@ -125,6 +125,7 @@ app.get("/search", async (req, res) => {
       Authorization: "Basic " + Buffer.from(es.username + ":" + es.password).toString("base64"),
     },
     body: JSON.stringify({
+      size: 40,
       _source: ["title", "description", "authors", "categories", "levels", "date", "year", "telegram"],
       query: {
         bool: {

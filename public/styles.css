@@ -1,69 +1,58 @@
-@font-face {
-  font-family: "Franklin Gothic Heavy";
-  src: url("https://iplan.ua/wp-content/uploads/2020/03/FRAHV.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
-
 html,
 body {
   padding: 0;
   margin: 0;
   min-height: 100vh;
-  accent-color: rgba(23, 89, 139, 1);
-  font: normal 18px/26px Roboto;
+  accent-color: #105889;
+  font-family: "Open Sans", sans-serif;
+  font: normal 16px/24px "Open Sans";
+  color: #444;
 }
 
 a {
-  color: #17598b;
+  color: #105889;
   text-decoration: none;
 }
 
 h1,
 h2,
 h3 {
-  font-family: "Franklin Gothic Heavy";
+  font-family: "Raleway", sans-serif;
 }
 
 header,
 footer {
-  padding: 20px;
+  padding: 23px;
 }
 
 header {
-  background-color: rgba(23, 89, 139, 1);
+  background-color: #189ad8;
   text-align: center;
-  position: relative;
 }
 
 header a {
   color: inherit;
   text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 header h1 {
   color: white;
+  font-weight: 500;
+  font-size: 30px;
   margin: 0;
-}
-
-header h1 span {
-  opacity: 0.5;
-}
-
-.logo {
-  text-decoration: none;
-  position: absolute;
-  left: 20px;
-  top: 50%;
-  transform: translateY(-50%);
+  display: inline-block;
+  vertical-align: middle;
 }
 
 header img {
-  width: 100px;
+  width: 80px;
+  display: block;
 }
 
 footer {
-  background: #333;
+  background: #105889;
   color: white;
   display: flex;
   flex-direction: column;
@@ -111,7 +100,7 @@ footer img {
 }
 
 .item p:last-child {
-  color: #60c4de;
+  color: #105889;
 }
 
 .item p:last-child span {
@@ -186,19 +175,10 @@ footer img {
 }
 
 @media (max-width: 42em) {
-  header h1,
+  header h1 span,
   #facets,
   footer .logo {
     display: none;
-  }
-
-  header {
-    height: 30px;
-  }
-
-  header .logo {
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
   }
 
   .main {
