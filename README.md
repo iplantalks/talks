@@ -2,11 +2,13 @@
 
 Web UI for iPlan Talks search service
 
-Data is stored in Google sheet and is synced to ElasticSearch, code for this can be found in corresponding repository
+http://eters.italks.com.ua
+
+Data is stored in Google sheet and is synced to ElasticSearch, code for this can be found in [sync](https://github.com/iplantalks/sync) repository
 
 This repository is for web ui part only
 
-Idea behind such split - is that it will allow to make it publicly available so anyone wanting to participate can do so
+Idea behind such split - is that it will allow to make web part publicly available so anyone wanting to participate can do so
 
 ## ElasticSearch
 
@@ -59,6 +61,21 @@ to check if data was saved:
 curl -s -u elastic:changeme -X POST http://localhost:9200/talks/_search -H 'Content-Type: application/json' -d '{"_source":["title"],"size":3,"query":{"match_all":{}}}'
 ```
 
+## Server
+
+To run server locally use
+
+```bash
+node server.js
+```
+
+If you do not have node installed use docker instead like so
+
+```bash
+docker buildx build --platform linux/amd64 -t talks .
+docker run -it --rm -p 3000:3000 --link=es -e ES_HOSTNAME=http://es:9200 talks
+```
+
 ## Docker
 
 to build image use
@@ -73,3 +90,9 @@ to run it locally use
 ```bash
 docker run -it --rm -p 3000:3000 --link=es -e ES_HOSTNAME=http://es:9200 ghcr.io/iplantalks/talks
 ```
+
+## Notes
+
+Keep in mind, this was written in day or two so do not expect anything fancy here
+
+Also note that by indent fancy frameworks and libraries were skipped to keep everything small and simple
