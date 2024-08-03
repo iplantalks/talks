@@ -106,7 +106,7 @@ function renderItems(res) {
     }
 
     // remove "https://docs.google.com/...." links from description
-    h = h.replace(/https:\/\/docs.google.com\/[^\s&$]+/g, '')
+    h = h.replace(/https:\/\/(docs|drive).google.com\/[^\s&$]+/g, '...')
 
     html += `<div class="item">
       <p><a href="${hit._source.telegram}" target="_blank" rel="nofollow"><img width="300" src="https://img.youtube.com/vi/${hit._id}/0.jpg" alt="${hit._source.title}" /></a></p>

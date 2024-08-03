@@ -91,6 +91,19 @@ to run it locally use
 docker run -it --rm -p 3000:3000 --link=es -e ES_HOSTNAME=http://es:9200 ghcr.io/iplantalks/talks
 ```
 
+## Deployment
+
+Service is running on vultr virtual machine, described in sync repo, it has an script that will pull and restart container, aka
+
+```bash
+# connect to server
+ssh talks
+# switch to docker user
+su - docker
+# restart service
+./talks.sh
+```
+
 ## Notes
 
 Keep in mind, this was written in day or two so do not expect anything fancy here
