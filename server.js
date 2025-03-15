@@ -1,4 +1,5 @@
 const express = require('express')
+const path = require('path')
 
 const es = {
   hostname: process.env.ES_HOSTNAME || 'http://localhost:9200',
@@ -10,6 +11,8 @@ const es = {
 const app = express()
 app.use(express.json())
 app.use(express.static('public'))
+
+app.get('/options', (req, res) => res.sendFile(path.resolve('public/options.html')))
 
 app.get('/search', async (req, res) => {
   var filters = []
