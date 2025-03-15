@@ -6,6 +6,7 @@ var levels = []
 var authors = []
 var status = []
 var where = ['title', 'description', 'transcript']
+var hidenews = true
 
 // read state from query string
 function init() {
@@ -21,13 +22,14 @@ function init() {
   for (var c of where) {
     document.querySelector('input[type="checkbox"][name="where"][value="' + c + '"]').checked = true
   }
-  console.log('init', { search, categories, year, levels, authors, status, where })
+  hidenews = !params.has('hidenews') || params.get('hidenews') === 'true'
+  console.log('init', { search, categories, year, levels, authors, status, where, hidenews })
 }
 
 // push state to query string
 function persist() {
   var params = new URLSearchParams()
-  params.set('q', search)
+  params.set('q', search ?? '')
   for (var c of categories) {
     params.append('categories', c)
   }
@@ -46,7 +48,8 @@ function persist() {
   for (var c of where) {
     params.append('where', c)
   }
-  console.log('persist', params)
+  params.set('hidenews', hidenews ? 'true' : 'false')
+  console.log('persist', Object.fromEntries(params.entries()))
   window.history.pushState(null, window.title, `${window.location.pathname}?${params}`)
 }
 
@@ -81,6 +84,8 @@ async function load() {
   for (var c of where) {
     url.searchParams.append('where', c)
   }
+
+  url.searchParams.set('hidenews', hidenews ? 'true' : 'false')
 
   window.res = await fetch(url).then(res => res.json())
 
@@ -131,7 +136,12 @@ function renderItems(res) {
 function rednerFacets(res) {
   var html = ''
 
-  html += renderFacet(res?.aggregations?.categories?.buckets, 'categories', 'Тематика', categories)
+  html += renderFacet(
+    res?.aggregations?.categories?.buckets.filter(({ key }) => key !== 'Спецетер'),
+    'categories',
+    'Тематика',
+    categories
+  )
   html += renderFacet(res?.aggregations?.year?.buckets, 'year', 'Рік', year)
   html += renderFacet(res?.aggregations?.levels?.buckets, 'levels', 'Складність', levels)
   html += renderFacet(res?.aggregations?.authors?.buckets, 'authors', 'Спікер', authors)
@@ -151,6 +161,12 @@ function renderFacet(buckets, name, title, state) {
       <label for="${f.key}">${f.key}&nbsp;<span>(${f.doc_count})</span></label>
     </p>`
   }
+  if (name === 'categories') {
+    html += `<p>
+      <input type="checkbox" name="hidenews" value="true" id="hidenews" ${hidenews ? 'checked' : ''} />
+      <label for="hidenews"><span>Приховати</span> спецетери</label>
+    </p>`
+  }
   return html
 }
 
@@ -162,6 +178,7 @@ document.querySelector('#search').addEventListener('input', event => {
   levels = []
   authors = []
   status = []
+  hidenews = true
   persist()
   load()
 })
@@ -177,6 +194,7 @@ document.querySelector('.main aside').addEventListener('change', async () => {
     status = [status]
   }
   where = Array.from(document.querySelectorAll("input[name='where']:checked")).map(el => el.value)
+  hidenews = document.querySelector("input[name='hidenews']").checked
   console.log('change', status)
   persist()
   load()
