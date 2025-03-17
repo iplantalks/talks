@@ -136,7 +136,7 @@ function renderItems(res) {
 function rednerFacets(res) {
   var html = ''
 
-  html += `<p><b>Підбірки</b></p><p><a href="/options" style="color:inherit">📈 Опціони</a></p>`
+  // html += `<p><b>Підбірки</b></p><p><a href="/options" style="color:inherit">📈 Опціони</a></p>`
 
   html += renderFacet(
     res?.aggregations?.categories?.buckets.filter(({ key }) => key !== 'Спецетер'),
