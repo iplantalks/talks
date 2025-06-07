@@ -1,15 +1,11 @@
 {
-  "name": "talks",
-  "version": "1.0.0",
-  "description": "Tool to find recorded talks",
-  "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
-  "keywords": [],
-  "author": "Alexandr Marchenko <marchenko.alexandr@gmail.com>",
-  "license": "ISC",
   "dependencies": {
     "express": "^4.18.2"
+  },
+  "prettier": {
+    "printWidth": 400
   }
 }
