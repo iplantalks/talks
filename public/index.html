@@ -3,80 +3,36 @@
   <head>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-HRXQ4P204N"></script>
     <script>
-      window.dataLayer = window.dataLayer || []
+      window.dataLayer = window.dataLayer || [];
       function gtag() {
-        dataLayer.push(arguments)
+        dataLayer.push(arguments);
       }
-      gtag('js', new Date())
-      gtag('config', 'G-HRXQ4P204N')
+      gtag("js", new Date());
+      gtag("config", "G-HRXQ4P204N");
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Гайд по етерам спільноти iPlan Talks</title>
     <meta name="robots" content="noindex, nofollow" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css?v=2" />
+    <meta name="color-scheme" content="light dark" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.js"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
   </head>
-  <body>
-    <header>
-      <a class="logo" href="https://italks.com.ua/"><img src="https://italks.com.ua/users/sergii.mikulov/img/655f1320d3115-20231123085354252736.webp" alt="iPlan" /></a>
-      <h1>
-        <a href="/"><span>Гайд по етерам спільноти </span>iPlan Talks</a>
-      </h1>
-    </header>
-
-    <div class="main">
-      <aside>
-        <input id="search" type="text" placeholder="пошуковий запит..." value="" />
-        <div id="where">
-          <p
-            title="За замовчання пошук відбувається відразу по трьом полям з найбільшим пріоритетом у назви і найменшим у транскрипту. Тобто, якщо, шукома фраза буде і там і там, то результати в назві котрих зустрічається шукомий текст будут першими"
-          >
-            <b>Шукаемо в:</b>
-          </p>
-          <p>
-            <label><input type="checkbox" name="where" value="title" checked /> Назві</label>
-          </p>
-          <p>
-            <label><input type="checkbox" name="where" value="description" checked /> Описі</label>
-          </p>
-          <p>
-            <label><input type="checkbox" name="where" value="transcript" checked /> Транскрипті</label>
-          </p>
-        </div>
-        <input type="checkbox" id="mobile_facets_toggler" />
-        <label for="mobile_facets_toggler">фільтри</label>
-        <div id="facets"></div>
-      </aside>
-      <div>
-        <main id="results"></main>
-        <section id="ca">
-          <div>
-            <h1>iPlan Talks</h1>
-            <p>Отримуй цінний досвід планерів<br />iPlan.ua за щомісячною підпискою</p>
-            <p><a href="https://cutt.ly/2e460oFu">Дізнатись більше</a></p>
-          </div>
-        </section>
-      </div>
-    </div>
-
-    <footer>
-      <div>
-        <a href="https://italks.com.ua/">Про нас</a>
-        <span style="opacity: 0.5">&nbsp;|&nbsp;</span>
-        <a href="https://italks.com.ua/#services">Послуги</a>
-        <span style="opacity: 0.5">&nbsp;|&nbsp;</span>
-        <a href="https://italks.com.ua/Oferta/">Оферта</a>
-        <span style="opacity: 0.5">&nbsp;|&nbsp;</span>
-        <a href="https://italks.com.ua/#contact">Контакти</a>
-      </div>
-      <div style="margin: 20px 0">З побажаннями щодо покращення сервісу <a href="https://cutt.ly/2e460oFu">звертайтеся до спільноти iTalks</a></div>
-      <div style="opacity: 0.5">&copy;2023 iTalks</div>
-    </footer>
-
-    <script src="scripts.js?v=5"></script>
+  <body class="bg-neutral-50 text-neutral-900 dark:bg-neutral-500 dark:text-neutral-50 container w-auto mx-auto p-4">
+    <div id="root"></div>
   </body>
+  <script type="text/babel" data-presets="react" src="index.jsx"></script>
+  <script type="text/babel">
+    fetch("/data")
+      .then((r) => r.json())
+      .then(({ years, levels, categories, authors, statuses }) => {
+        ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App, { years, levels, categories, authors, statuses }));
+      })
+      .catch((error) => {
+        console.warn(error.message || error);
+        alert("Виникла помилка при завантаженні даних. Спробуйте перезавантажити сторінку.\n\n" + error.message);
+      });
+  </script>
 </html>

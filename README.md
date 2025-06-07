@@ -109,3 +109,14 @@ su - docker
 Keep in mind, this was written in day or two so do not expect anything fancy here
 
 Also note that by indent fancy frameworks and libraries were skipped to keep everything small and simple
+
+## Accessing Elastic
+
+If you need access elastic, create `.env` something like this:
+
+```
+export ES_HOSTNAME=http://45.32.155.223:9200
+export ES_PASSWORD=xxxxx
+```
+
+grab actual password in sync repo, run `source .env`
