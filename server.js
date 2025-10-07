@@ -127,7 +127,7 @@ app.get("/search", async (req, res) => {
   }
 
   const body = {
-    size: 40,
+    size: search || years.length || levels.length || categories.length || authors.length || statuses.length ? 1000 : 40,
     _source: ["title", "description", "authors", "categories", "levels", "date", "year", "telegram"],
     query: {
       bool: {
