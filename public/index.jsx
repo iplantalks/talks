@@ -88,9 +88,9 @@ function useCheckboxes(key) {
 
 function Video({ id, title, year, categories, levels, authors, telegram }) {
   return (
-    <a className="max-w-[480px]" href={telegram} target="_blank" rel="nofollow">
+    <a className="max-w-[480px] group" href={telegram} target="_blank" rel="nofollow">
       <div className="aspect-video bg-center rounded" style={{ backgroundImage: `url("https://img.youtube.com/vi/${id}/0.jpg")` }} />
-      <div className="pt-2 text-xl font-bold">{title}</div>
+      <div className="pt-2 text-xl font-bold group-hover:text-sky-600">{title}</div>
       <div className="pt-2 flex gap-2 flex-wrap">
         <div className="flex items-center gap-2">
           <Calendar />
@@ -140,7 +140,7 @@ function Square() {
 
 function SquareChecked() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-sky-600">
       <rect width="18" height="18" x="3" y="3" rx="2" />
       <path d="m9 12 2 2 4-4" />
     </svg>
@@ -158,7 +158,7 @@ function Search() {
 
 function Calendar() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-calendar1-icon lucide-calendar-1">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M11 14h1v4" />
       <path d="M16 2v4" />
       <path d="M3 10h18" />
