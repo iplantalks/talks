@@ -37,11 +37,13 @@ app.get("/data", async (req, res) => {
         categories: {
           terms: {
             field: "categories",
+            size: 100,
           },
         },
         authors: {
           terms: {
             field: "authors",
+            size: 100,
           },
         },
         statuses: {
@@ -175,6 +177,6 @@ app.listen(3000, () =>
         username: es.username,
         index: es.index,
       },
-    })
-  )
+    }),
+  ),
 );
