@@ -86,7 +86,7 @@ function useCheckboxes(key) {
   return [selected, toggle];
 }
 
-function Video({ id, title, year, categories, levels, authors, telegram }) {
+function Video({ id, title, year, categories, levels, authors, telegram, date }) {
   return (
     <a className="max-w-[480px] group" href={telegram} target="_blank" rel="nofollow">
       <div className="aspect-video bg-center rounded" style={{ backgroundImage: `url("https://img.youtube.com/vi/${id}/0.jpg")` }} />
@@ -94,7 +94,7 @@ function Video({ id, title, year, categories, levels, authors, telegram }) {
       <div className="pt-2 flex gap-2 flex-wrap">
         <div className="flex items-center gap-2">
           <Calendar />
-          <span>{year}</span>
+          <span>{date}</span>
         </div>
         <div className="flex items-center gap-2">
           <Bookmark />
