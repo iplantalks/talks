@@ -96,7 +96,7 @@ function useCheckboxes(key) {
 function Video({ id, title, year, categories, levels, authors, telegram, date }) {
   return (
     <a className="w-full group" href={telegram} target="_blank" rel="nofollow">
-      <div className="aspect-video bg-center rounded" style={{ backgroundImage: `url("https://img.youtube.com/vi/${id}/0.jpg")` }} />
+      <div className="aspect-video bg-cover bg-center bg-no-repeat rounded" style={{ backgroundImage: `url("https://img.youtube.com/vi/${id}/0.jpg")` }} />
       <div className="pt-2 text-xl font-bold group-hover:text-sky-600">{title}</div>
       <div className="pt-2 flex gap-2 flex-wrap">
         <div className="flex items-center gap-2">
