@@ -29,11 +29,18 @@ function App({ years, levels, categories, authors, statuses }) {
 
   return (
     <div>
-      <a href="/" className="text-2xl font-bold text-center my-10 block">
+      <a href="/" className="text-2xl font-bold text-center mt-10 mb-4 block">
         <span className="text-zinc-500">Гайд по етерам спільноти </span>iPlan Talks
       </a>
-      <div className="flex flex-col md:flex-row gap-4 justify-center">
-        <div className="flex flex-col gap-4">
+      <p className="text-center max-w-2xl mx-auto mb-10 text-neutral-600 dark:text-neutral-200">
+        Освітні лекції та воркшопи, які доступні резидентам спільноти iTalks. Долучитись до спільноти можна через{" "}
+        <a href="https://cutt.ly/2e460oFu" target="_blank" rel="nofollow" className="text-sky-600 hover:underline font-semibold">
+          телеграм бота
+        </a>
+        .
+      </p>
+      <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex flex-col gap-4 md:w-64 md:shrink-0">
           <div className="flex items-center gap-2">
             <input type="text" placeholder="Пошук..." className="border border-neutral-300 bg-inherit text-inherit rounded px-2 py-1 w-full" value={search} onChange={(e) => setSearch(e.target.value)} />
             <button className="flex-0 bg-blue-500 text-white px-2 py-2 rounded hover:bg-blue-600 block w-full" onClick={() => submit()}>
@@ -46,7 +53,7 @@ function App({ years, levels, categories, authors, statuses }) {
           <Checkboxes name="Спікер" selected={selectedAuthors} options={authors} toggle={toggleAuthors} />
           <Checkboxes name="Статус" selected={selectedStatuses} options={statuses} toggle={toggleStatuses} />
         </div>
-        <div className="flex flex-col gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 flex-1">
           {items.map((item) => (
             <Video key={item.id} {...item} />
           ))}
@@ -88,7 +95,7 @@ function useCheckboxes(key) {
 
 function Video({ id, title, year, categories, levels, authors, telegram, date }) {
   return (
-    <a className="max-w-[480px] group" href={telegram} target="_blank" rel="nofollow">
+    <a className="w-full group" href={telegram} target="_blank" rel="nofollow">
       <div className="aspect-video bg-center rounded" style={{ backgroundImage: `url("https://img.youtube.com/vi/${id}/0.jpg")` }} />
       <div className="pt-2 text-xl font-bold group-hover:text-sky-600">{title}</div>
       <div className="pt-2 flex gap-2 flex-wrap">
