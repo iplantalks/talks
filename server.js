@@ -24,6 +24,12 @@ app.get("/data", async (req, res) => {
         match_all: {},
       },
       aggs: {
+        types: {
+          terms: {
+            field: "types",
+            size: 100,
+          },
+        },
         years: {
           terms: {
             field: "year",
@@ -55,6 +61,7 @@ app.get("/data", async (req, res) => {
     }),
   }).then((r) => r.json());
   const data = {
+    types: json.aggregations.types.buckets.map((b) => b.key).sort((a, b) => a.localeCompare(b)),
     years: json.aggregations.years.buckets
       .map((b) => b.key)
       .sort((a, b) => b - a)
@@ -75,6 +82,7 @@ app.get("/search", async (req, res) => {
   const categories = req.query.categories ? (Array.isArray(req.query.categories) ? req.query.categories : [req.query.categories]) : [];
   const authors = req.query.authors ? (Array.isArray(req.query.authors) ? req.query.authors : [req.query.authors]) : [];
   const statuses = req.query.statuses ? (Array.isArray(req.query.statuses) ? req.query.statuses : [req.query.statuses]) : [];
+  const types = req.query.types ? (Array.isArray(req.query.types) ? req.query.types : [req.query.types]) : [];
 
   const must = [];
 
@@ -84,6 +92,14 @@ app.get("/search", async (req, res) => {
         query: search,
         fields: ["title^5", "description^3", "transcript"],
         type: "best_fields",
+      },
+    });
+  }
+
+  if (types.length) {
+    must.push({
+      terms: {
+        types: types,
       },
     });
   }
@@ -146,7 +162,7 @@ app.get("/search", async (req, res) => {
   }
 
   const body = {
-    size: search || years.length || levels.length || categories.length || authors.length || statuses.length ? 1000 : 40,
+    size: search || types.length || years.length || levels.length || categories.length || authors.length || statuses.length ? 1000 : 40,
     _source: ["title", "description", "authors", "categories", "levels", "date", "year", "telegram"],
     query: {
       bool: {

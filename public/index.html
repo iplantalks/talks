@@ -27,8 +27,8 @@
   <script type="text/babel">
     fetch("/data")
       .then((r) => r.json())
-      .then(({ years, levels, categories, authors, statuses }) => {
-        ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App, { years, levels, categories, authors, statuses }));
+      .then(({ types, years, levels, categories, authors, statuses }) => {
+        ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App, { types, years, levels, categories, authors, statuses }));
       })
       .catch((error) => {
         console.warn(error.message || error);

@@ -1,10 +1,11 @@
 const { useState, useEffect } = React;
 
 /**
- * @param {{years:string[], levels:string[], categories:string[], authors:string[], statuses:string[]}} props
+ * @param {{types:string[], years:string[], levels:string[], categories:string[], authors:string[], statuses:string[]}} props
  */
-function App({ years, levels, categories, authors, statuses }) {
+function App({ types, years, levels, categories, authors, statuses }) {
   const [search, setSearch] = useSearch();
+  const [selectedTypes, toggleTypes] = useCheckboxes("types");
   const [selectedYears, toggleYears] = useCheckboxes("years");
   const [selectedCategories, toggleCategories] = useCheckboxes("categories");
   const [selectedLevels, toggleLevels] = useCheckboxes("levels");
@@ -28,7 +29,7 @@ function App({ years, levels, categories, authors, statuses }) {
   // performs the initial search on first render.
   useEffect(() => {
     submit();
-  }, [selectedYears, selectedCategories, selectedLevels, selectedAuthors, selectedStatuses]);
+  }, [selectedTypes, selectedYears, selectedCategories, selectedLevels, selectedAuthors, selectedStatuses]);
 
   // Live text search: debounce typing so we don't hit Elasticsearch on every keystroke.
   const firstSearch = React.useRef(true);
@@ -56,6 +57,7 @@ function App({ years, levels, categories, authors, statuses }) {
       <div className="flex flex-col md:flex-row gap-6">
         <div className="flex flex-col gap-4 md:w-64 md:shrink-0">
           <input type="text" placeholder="Пошук..." className="border border-neutral-300 bg-inherit text-inherit rounded px-2 py-1 w-full" value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => e.key === "Enter" && submit()} />
+          <Checkboxes name="Тип" selected={selectedTypes} options={types} toggle={toggleTypes} defaultOpen />
           <Checkboxes name="Тематика" selected={selectedCategories} options={categories.filter((c) => c !== "Спецетер")} toggle={toggleCategories} defaultOpen />
           <Checkboxes name="Рік" selected={selectedYears} options={years} toggle={toggleYears} />
           <Checkboxes name="Складність" selected={selectedLevels} options={levels} toggle={toggleLevels} />
