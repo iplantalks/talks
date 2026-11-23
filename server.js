@@ -57,7 +57,7 @@ app.get("/data", async (req, res) => {
   const data = {
     years: json.aggregations.years.buckets
       .map((b) => b.key)
-      .sort((a, b) => a - b)
+      .sort((a, b) => b - a)
       .map((y) => y.toString()),
     levels: json.aggregations.levels.buckets.map((b) => b.key).sort((a, b) => a.localeCompare(b)),
     categories: json.aggregations.categories.buckets.map((b) => b.key).sort((a, b) => a.localeCompare(b)),
@@ -104,10 +104,17 @@ app.get("/search", async (req, res) => {
     });
   }
 
-  if (categories.length) {
+  // "Спецетер" (special broadcasts / weekly news) and the "Архів" status are hidden by
+  // default and only appear when their reveal checkbox is checked. So "Спецетер" is never
+  // a normal restrict filter, and status is handled purely through must_not below.
+  const showNews = categories.includes("Спецетер");
+  const showArchive = statuses.includes("Архів");
+  const restrictCategories = categories.filter((c) => c !== "Спецетер");
+
+  if (restrictCategories.length) {
     must.push({
       terms: {
-        categories: categories,
+        categories: restrictCategories,
       },
     });
   }
@@ -120,10 +127,20 @@ app.get("/search", async (req, res) => {
     });
   }
 
-  if (statuses.length) {
-    must.push({
+  const must_not = [];
+
+  if (!showNews) {
+    must_not.push({
       terms: {
-        status: statuses,
+        categories: ["Спецетер"],
+      },
+    });
+  }
+
+  if (!showArchive) {
+    must_not.push({
+      terms: {
+        status: ["Архів"],
       },
     });
   }
@@ -134,6 +151,7 @@ app.get("/search", async (req, res) => {
     query: {
       bool: {
         must,
+        must_not,
       },
     },
     sort: [

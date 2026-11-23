@@ -23,9 +23,23 @@ function App({ years, levels, categories, authors, statuses }) {
       .then(setItems);
   };
 
+  // Instant search: re-run the search immediately whenever any filter changes
+  // (the facet effects below keep the URL in sync before this runs). This also
+  // performs the initial search on first render.
   useEffect(() => {
     submit();
-  }, []);
+  }, [selectedYears, selectedCategories, selectedLevels, selectedAuthors, selectedStatuses]);
+
+  // Live text search: debounce typing so we don't hit Elasticsearch on every keystroke.
+  const firstSearch = React.useRef(true);
+  useEffect(() => {
+    if (firstSearch.current) {
+      firstSearch.current = false;
+      return;
+    }
+    const timer = setTimeout(submit, 300);
+    return () => clearTimeout(timer);
+  }, [search]);
 
   return (
     <div>
@@ -41,17 +55,15 @@ function App({ years, levels, categories, authors, statuses }) {
       </p>
       <div className="flex flex-col md:flex-row gap-6">
         <div className="flex flex-col gap-4 md:w-64 md:shrink-0">
-          <div className="flex items-center gap-2">
-            <input type="text" placeholder="Пошук..." className="border border-neutral-300 bg-inherit text-inherit rounded px-2 py-1 w-full" value={search} onChange={(e) => setSearch(e.target.value)} />
-            <button className="flex-0 bg-blue-500 text-white px-2 py-2 rounded hover:bg-blue-600 block w-full" onClick={() => submit()}>
-              <Search />
-            </button>
-          </div>
-          <Checkboxes name="Тематика" selected={selectedCategories} options={categories} toggle={toggleCategories} />
+          <input type="text" placeholder="Пошук..." className="border border-neutral-300 bg-inherit text-inherit rounded px-2 py-1 w-full" value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => e.key === "Enter" && submit()} />
+          <Checkboxes name="Тематика" selected={selectedCategories} options={categories.filter((c) => c !== "Спецетер")} toggle={toggleCategories} defaultOpen />
           <Checkboxes name="Рік" selected={selectedYears} options={years} toggle={toggleYears} />
           <Checkboxes name="Складність" selected={selectedLevels} options={levels} toggle={toggleLevels} />
           <Checkboxes name="Спікер" selected={selectedAuthors} options={authors} toggle={toggleAuthors} />
-          <Checkboxes name="Статус" selected={selectedStatuses} options={statuses} toggle={toggleStatuses} />
+          <div className="flex flex-col gap-2 border-t border-neutral-300 pt-4">
+            <Toggle label="Показувати спецетери" checked={selectedCategories.includes("Спецетер")} onChange={() => toggleCategories("Спецетер")} />
+            <Toggle label="Показувати архів" checked={selectedStatuses.includes("Архів")} onChange={() => toggleStatuses("Архів")} />
+          </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 flex-1">
           {items.map((item) => (
@@ -93,7 +105,7 @@ function useCheckboxes(key) {
   return [selected, toggle];
 }
 
-function Video({ id, title, year, categories, levels, authors, telegram, date }) {
+function Video({ id, title, year, categories, levels, authors, telegram }) {
   return (
     <a className="w-full group" href={telegram} target="_blank" rel="nofollow">
       <div className="aspect-video bg-cover bg-center bg-no-repeat rounded" style={{ backgroundImage: `url("https://img.youtube.com/vi/${id}/0.jpg")` }} />
@@ -101,7 +113,7 @@ function Video({ id, title, year, categories, levels, authors, telegram, date })
       <div className="pt-2 flex gap-2 flex-wrap">
         <div className="flex items-center gap-2">
           <Calendar />
-          <span>{date}</span>
+          <span>{year}</span>
         </div>
         <div className="flex items-center gap-2">
           <Bookmark />
@@ -120,20 +132,47 @@ function Video({ id, title, year, categories, levels, authors, telegram, date })
   );
 }
 
-function Checkboxes({ name, selected, options, toggle }) {
+function Checkboxes({ name, selected, options, toggle, defaultOpen = false }) {
+  const [open, setOpen] = useState(defaultOpen);
   return (
     <div className="flex flex-col gap-2">
-      <h2 className="text-lg font-semibold">{name}</h2>
-      <div className="flex flex-col gap-2">
-        {options.map((option) => (
-          <label key={option} className="flex items-start gap-2">
-            <input className="hidden" type="checkbox" name={name} defaultValue={option} checked={selected.includes(option)} onChange={() => toggle(option)} />
-            {selected.includes(option) ? <SquareChecked /> : <Square />}
-            <span>{option}</span>
-          </label>
-        ))}
-      </div>
+      <button type="button" className="flex items-center justify-between text-lg font-semibold cursor-pointer select-none" onClick={() => setOpen((o) => !o)}>
+        <span>
+          {name}
+          {!open && selected.length > 0 ? <span className="text-sky-600"> ({selected.length})</span> : null}
+        </span>
+        <Chevron open={open} />
+      </button>
+      {open ? (
+        <div className="flex flex-col gap-2">
+          {options.map((option) => (
+            <label key={option} className="flex items-start gap-2">
+              <input className="hidden" type="checkbox" name={name} defaultValue={option} checked={selected.includes(option)} onChange={() => toggle(option)} />
+              {selected.includes(option) ? <SquareChecked /> : <Square />}
+              <span>{option}</span>
+            </label>
+          ))}
+        </div>
+      ) : null}
     </div>
+  );
+}
+
+function Toggle({ label, checked, onChange }) {
+  return (
+    <label className="flex items-start gap-2">
+      <input className="hidden" type="checkbox" checked={checked} onChange={onChange} />
+      {checked ? <SquareChecked /> : <Square />}
+      <span>{label}</span>
+    </label>
+  );
+}
+
+function Chevron({ open }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform ${open ? "rotate-180" : ""}`}>
+      <path d="m6 9 6 6 6-6" />
+    </svg>
   );
 }
 
