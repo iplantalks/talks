@@ -5,6 +5,7 @@ const { useState, useEffect } = React;
  */
 function App({ types, years, levels, categories, authors, statuses }) {
   const [search, setSearch] = useSearch();
+  const [sort, setSort] = useSort();
   const [selectedTypes, toggleTypes] = useCheckboxes("types");
   const [selectedYears, toggleYears] = useCheckboxes("years");
   const [selectedCategories, toggleCategories] = useCheckboxes("categories");
@@ -29,7 +30,7 @@ function App({ types, years, levels, categories, authors, statuses }) {
   // performs the initial search on first render.
   useEffect(() => {
     submit();
-  }, [selectedTypes, selectedYears, selectedCategories, selectedLevels, selectedAuthors, selectedStatuses]);
+  }, [sort, selectedTypes, selectedYears, selectedCategories, selectedLevels, selectedAuthors, selectedStatuses]);
 
   // Live text search: debounce typing so we don't hit Elasticsearch on every keystroke.
   const firstSearch = React.useRef(true);
@@ -56,7 +57,13 @@ function App({ types, years, levels, categories, authors, statuses }) {
       </p>
       <div className="flex flex-col md:flex-row gap-6">
         <div className="flex flex-col gap-4 md:w-64 md:shrink-0">
-          <input type="text" placeholder="Пошук..." className="border border-neutral-300 bg-inherit text-inherit rounded px-2 py-1 w-full" value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => e.key === "Enter" && submit()} />
+          <input type="search" placeholder="Пошук..." className="border border-neutral-300 bg-inherit text-inherit rounded px-2 py-1 w-full" value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => e.key === "Enter" && submit()} />
+          {search ? (
+            <select className="border border-neutral-300 bg-inherit text-inherit rounded px-2 py-1 w-full" value={sort} onChange={(e) => setSort(e.target.value)}>
+              <option value="relevance">Спочатку релевантні</option>
+              <option value="date">Спочатку нові</option>
+            </select>
+          ) : null}
           <Checkboxes name="Тип" selected={selectedTypes} options={types} toggle={toggleTypes} defaultOpen />
           <Checkboxes name="Тематика" selected={selectedCategories} options={categories.filter((c) => c !== "Спецетер")} toggle={toggleCategories} defaultOpen />
           <Checkboxes name="Рік" selected={selectedYears} options={years} toggle={toggleYears} />
@@ -89,6 +96,20 @@ function useSearch() {
     window.history.pushState(null, "", `${window.location.pathname}?${params}`);
   }, [search]);
   return [search, setSearch];
+}
+
+function useSort() {
+  const [sort, setSort] = useState(() => new URLSearchParams(window.location.search).get("sort") || "relevance");
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (sort === "date") {
+      params.set("sort", sort);
+    } else {
+      params.delete("sort");
+    }
+    window.history.pushState(null, "", `${window.location.pathname}?${params}`);
+  }, [sort]);
+  return [sort, setSort];
 }
 
 function useCheckboxes(key) {

@@ -83,6 +83,8 @@ app.get("/search", async (req, res) => {
   const authors = req.query.authors ? (Array.isArray(req.query.authors) ? req.query.authors : [req.query.authors]) : [];
   const statuses = req.query.statuses ? (Array.isArray(req.query.statuses) ? req.query.statuses : [req.query.statuses]) : [];
   const types = req.query.types ? (Array.isArray(req.query.types) ? req.query.types : [req.query.types]) : [];
+  // "date" sorts newest first (freshness); anything else sorts by relevance (default).
+  const sort = req.query.sort === "date" ? "date" : "relevance";
 
   const must = [];
 
@@ -170,18 +172,10 @@ app.get("/search", async (req, res) => {
         must_not,
       },
     },
-    sort: [
-      {
-        _score: {
-          order: "desc",
-        },
-      },
-      {
-        date: {
-          order: "desc",
-        },
-      },
-    ],
+    sort:
+      sort === "date"
+        ? [{ date: { order: "desc" } }, { _score: { order: "desc" } }]
+        : [{ _score: { order: "desc" } }, { date: { order: "desc" } }],
   };
 
   // console.log(JSON.stringify(body.query, null, 2));
